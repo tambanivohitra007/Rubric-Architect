@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RubricData } from '../types';
-import { Download, Printer, FileText, Check, ArrowLeft } from 'lucide-react';
+import { Download, Printer, FileText, Check, ArrowLeft, Loader2, FileJson } from 'lucide-react';
 
 interface Props {
   data: RubricData;
@@ -8,6 +8,7 @@ interface Props {
 }
 
 const Step4Review: React.FC<Props> = ({ data, onBack }) => {
+  const [isExporting, setIsExporting] = useState(false);
 
   const handlePrint = () => {
     window.print();
@@ -23,39 +24,103 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
     link.click();
   };
 
+  const handleWordExport = () => {
+    const element = document.getElementById('rubric-content');
+    if (!element) return;
+
+    const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
+         "xmlns:w='urn:schemas-microsoft-com:office:word' "+
+         "xmlns='http://www.w3.org/TR/REC-html40'>"+
+         "<head><meta charset='utf-8'><title>Rubric Export</title></head><body>";
+    const footer = "</body></html>";
+    const sourceHTML = header + element.innerHTML + footer;
+    
+    const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+    const fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = source;
+    fileDownload.download = `${data.topic.replace(/\s+/g, '_')}_rubric.doc`;
+    fileDownload.click();
+    document.body.removeChild(fileDownload);
+  };
+
+  const handlePDFExport = async () => {
+    const element = document.getElementById('rubric-content');
+    if (!element || typeof (window as any).html2pdf === 'undefined') {
+        alert("PDF export library not ready. Please try Print -> Save as PDF.");
+        return;
+    }
+
+    setIsExporting(true);
+    const opt = {
+      margin:       0.4,
+      filename:     `${data.topic.replace(/\s+/g, '_')}_rubric.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+    };
+
+    try {
+        await (window as any).html2pdf().set(opt).from(element).save();
+    } catch (e) {
+        console.error("PDF Export failed", e);
+    } finally {
+        setIsExporting(false);
+    }
+  };
+
   const isHolistic = data.rubricType === 'Holistic';
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
       
-      <div className="no-print flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+      <div className="no-print flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm gap-4">
         <button
           onClick={onBack}
-          className="text-slate-500 hover:text-indigo-600 flex items-center gap-2 font-medium px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors"
+          className="text-slate-500 hover:text-indigo-600 flex items-center gap-2 font-medium px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors self-start sm:self-auto"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Editing
         </button>
         
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2 justify-end">
           <button
             onClick={handleJSONExport}
-            className="flex items-center gap-2 px-4 py-2 text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 font-medium transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 font-medium transition-colors text-sm"
+            title="Export raw data"
+          >
+            <FileJson className="w-4 h-4" />
+            JSON
+          </button>
+          
+          <button
+            onClick={handleWordExport}
+            className="flex items-center gap-2 px-3 py-2 text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 font-medium transition-colors text-sm"
           >
             <FileText className="w-4 h-4" />
-            Export JSON
+            Word
           </button>
+
+          <button
+            onClick={handlePDFExport}
+            disabled={isExporting}
+            className="flex items-center gap-2 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium shadow-md shadow-indigo-200 transition-colors text-sm disabled:opacity-70"
+          >
+            {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+            {isExporting ? 'Exporting...' : 'PDF'}
+          </button>
+
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium shadow-md shadow-indigo-200 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-slate-700 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 font-medium transition-colors text-sm"
+            title="Print"
           >
             <Printer className="w-4 h-4" />
-            Print / Save as PDF
           </button>
         </div>
       </div>
 
-      <div className="rubric-container bg-white p-8 rounded-xl shadow-lg border border-slate-200 print:shadow-none print:border-0 print:p-0">
+      <div id="rubric-content" className="rubric-container bg-white p-8 rounded-xl shadow-lg border border-slate-200 print:shadow-none print:border-0 print:p-0">
         <div className="mb-8 border-b border-slate-100 pb-6">
           <div className="flex justify-between items-start">
              <div>
@@ -83,11 +148,11 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr>
-              <th className="p-3 border-b-2 border-slate-800 w-1/5 font-bold text-slate-900">
+              <th className="p-3 border-b-2 border-slate-800 w-1/5 font-bold text-slate-900 bg-white">
                 {isHolistic ? 'Score' : 'Criteria'}
               </th>
               {isHolistic ? (
-                <th className="p-3 border-b-2 border-slate-800 font-bold text-slate-900">Description</th>
+                <th className="p-3 border-b-2 border-slate-800 font-bold text-slate-900 bg-white">Description</th>
               ) : (
                 data.scale.map((level, i) => (
                   <th key={i} className="p-3 border-b-2 border-slate-800 font-bold text-slate-900 text-center bg-slate-50">
@@ -105,10 +170,10 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
                // Render transposed for Holistic
                data.rows[0]?.levels.map((level) => (
                   <tr key={level.id} className="break-inside-avoid">
-                     <td className="p-4 border-b border-slate-200 bg-slate-50/50 font-bold align-top">
+                     <td className="p-4 border-b border-slate-200 bg-slate-50 font-bold align-top">
                         {level.title} ({level.score} pts)
                      </td>
-                     <td className="p-4 border-b border-slate-200 text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                     <td className="p-4 border-b border-slate-200 text-sm text-slate-700 leading-relaxed whitespace-pre-wrap bg-white">
                         {level.description}
                      </td>
                   </tr>
@@ -124,7 +189,7 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
                       <div className="text-xs text-slate-500">{criterion?.description}</div>
                     </td>
                     {row.levels.map((level) => (
-                      <td key={level.id} className="p-4 border-b border-slate-200 border-l border-slate-100 text-sm text-slate-700 leading-relaxed align-top">
+                      <td key={level.id} className="p-4 border-b border-slate-200 border-l border-slate-100 text-sm text-slate-700 leading-relaxed align-top bg-white">
                         {level.description}
                       </td>
                     ))}
