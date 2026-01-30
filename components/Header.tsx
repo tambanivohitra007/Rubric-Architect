@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Layers, Plus, Library } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { LoginButton } from './auth/LoginButton';
 import { UserMenu } from './auth/UserMenu';
 
 export function Header() {
@@ -56,7 +55,7 @@ export function Header() {
               University Assessment Builder
             </span>
           )}
-          {isAuthenticated ? <UserMenu /> : <LoginButton />}
+          {isAuthenticated && <UserMenu />}
         </div>
       </div>
     </header>
