@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { RubricData, RubricRow } from '../types';
+import React, { useState } from 'react';
+import { RubricData } from '../types';
 import { generateRubricRows } from '../services/geminiService';
 import { Wand2, Loader2, ChevronRight, AlertCircle, RefreshCw } from 'lucide-react';
 
@@ -26,7 +26,8 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
         data.criteria, 
         data.scale,
         data.contextMaterial,
-        data.attachedFile || null
+        data.attachedFile || null,
+        data.rubricType
       );
       updateData({ rows });
     } catch (e) {
@@ -48,12 +49,20 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
     updateData({ rows: updatedRows });
   };
 
+  const isHolistic = data.rubricType === 'Holistic';
+
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 h-full flex flex-col">
       <div className="flex justify-between items-end pb-4 border-b border-slate-200">
         <div className="space-y-1">
-          <h2 className="text-2xl font-bold text-slate-800">Performance Levels</h2>
-          <p className="text-slate-500">Define what success looks like at each stage.</p>
+          <h2 className="text-2xl font-bold text-slate-800">
+            {isHolistic ? 'Holistic Descriptions' : 'Performance Levels'}
+          </h2>
+          <p className="text-slate-500">
+            {isHolistic 
+              ? 'Define the overall quality for each score.' 
+              : 'Define what success looks like at each stage.'}
+          </p>
         </div>
         
         {!hasRows || isLoading ? null : (
@@ -74,8 +83,8 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
           </div>
           <h3 className="text-xl font-semibold text-slate-800 mb-2">Populate the Grid</h3>
           <p className="text-slate-500 max-w-md mb-8">
-            AI will write unique descriptions for each performance level ({data.scale.join(', ')}) 
-            for all {data.criteria.length} of your criteria, taking into account any course materials provided.
+            AI will write {isHolistic ? 'comprehensive' : 'unique'} descriptions for {isHolistic ? 'each score level' : `each performance level for your ${data.criteria.length} criteria`}, 
+            based on the {data.rubricType} style.
           </p>
           
           <button
@@ -84,7 +93,7 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
             className="px-8 py-3.5 bg-indigo-600 text-white rounded-lg font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 disabled:opacity-70 transition-all flex items-center gap-3 transform hover:-translate-y-0.5"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Wand2 className="w-5 h-5" />}
-            {isLoading ? 'Generating Descriptions...' : 'Generate Rubric Content'}
+            {isLoading ? 'Generating...' : 'Generate Content'}
           </button>
           
           {error && (
@@ -108,35 +117,76 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
           <table className="w-full text-left border-collapse min-w-[1000px]">
             <thead>
               <tr>
-                <th className="p-4 border-b-2 border-slate-200 w-1/5 bg-slate-50 sticky top-0 z-10 font-bold text-slate-700">Criteria</th>
-                {data.scale.map((level, i) => (
-                  <th key={i} className="p-4 border-b-2 border-slate-200 bg-slate-50 sticky top-0 z-10 font-semibold text-slate-600 text-sm uppercase tracking-wide">
-                    {level}
+                <th className="p-4 border-b-2 border-slate-200 w-1/5 bg-slate-50 sticky top-0 z-10 font-bold text-slate-700">
+                  {isHolistic ? 'Overall Score' : 'Criteria'}
+                </th>
+                {isHolistic ? (
+                  <th className="p-4 border-b-2 border-slate-200 bg-slate-50 sticky top-0 z-10 font-semibold text-slate-600 text-sm uppercase tracking-wide">
+                    Description
                   </th>
-                ))}
+                ) : (
+                  data.scale.map((level, i) => (
+                    <th key={i} className="p-4 border-b-2 border-slate-200 bg-slate-50 sticky top-0 z-10 font-semibold text-slate-600 text-sm uppercase tracking-wide">
+                      {level}
+                    </th>
+                  ))
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {data.rows.map((row) => {
-                const criterion = data.criteria.find(c => c.id === row.criterionId);
-                return (
-                  <tr key={row.id} className="group hover:bg-slate-50/50 transition-colors">
-                    <td className="p-4 align-top border-r border-slate-100 bg-white">
-                      <div className="font-bold text-slate-800 mb-1">{criterion?.title}</div>
-                      <div className="text-xs text-slate-500 leading-relaxed">{criterion?.description}</div>
-                    </td>
-                    {row.levels.map((level, idx) => (
-                      <td key={level.id} className="p-3 align-top border-r border-slate-100 last:border-r-0 relative">
+              {/* For Holistic, we might have just one row in data.rows, but we want to render it transpose-style:
+                  Rows = Levels. 
+                  Wait, RubricRow structure is {criterionId, levels[]}.
+                  So we normally render 1 row per criterion.
+                  For Holistic, we have 1 row with N levels.
+                  We can just render that 1 row, but maybe vertically is better for holistic?
+                  Let's stick to horizontal for now to keep code simple, OR check rubricType.
+                  
+                  Actually, holistic is usually: 
+                  Score 5 | Description
+                  Score 4 | Description
+                  
+                  This is essentially transposing the single row.
+              */}
+              {isHolistic ? (
+                // Transposed view for Holistic: Show levels as rows
+                data.rows[0]?.levels.map((level, idx) => (
+                   <tr key={level.id} className="group hover:bg-slate-50/50 transition-colors">
+                      <td className="p-4 align-top border-r border-slate-100 bg-white font-bold text-slate-800">
+                        {level.title}
+                      </td>
+                      <td className="p-3 align-top">
                         <textarea
                           className="w-full h-full min-h-[120px] text-sm text-slate-600 bg-transparent border border-transparent hover:border-indigo-100 focus:border-indigo-400 focus:bg-white rounded-md p-2 resize-none outline-none transition-all"
                           value={level.description}
-                          onChange={(e) => updateCellDescription(row.id, idx, e.target.value)}
+                          onChange={(e) => updateCellDescription(data.rows[0].id, idx, e.target.value)}
                         />
                       </td>
-                    ))}
-                  </tr>
-                );
-              })}
+                   </tr>
+                ))
+              ) : (
+                // Standard Grid
+                data.rows.map((row) => {
+                  const criterion = data.criteria.find(c => c.id === row.criterionId);
+                  return (
+                    <tr key={row.id} className="group hover:bg-slate-50/50 transition-colors">
+                      <td className="p-4 align-top border-r border-slate-100 bg-white">
+                        <div className="font-bold text-slate-800 mb-1">{criterion?.title || 'Criterion'}</div>
+                        <div className="text-xs text-slate-500 leading-relaxed">{criterion?.description}</div>
+                      </td>
+                      {row.levels.map((level, idx) => (
+                        <td key={level.id} className="p-3 align-top border-r border-slate-100 last:border-r-0 relative">
+                          <textarea
+                            className="w-full h-full min-h-[120px] text-sm text-slate-600 bg-transparent border border-transparent hover:border-indigo-100 focus:border-indigo-400 focus:bg-white rounded-md p-2 resize-none outline-none transition-all"
+                            value={level.description}
+                            onChange={(e) => updateCellDescription(row.id, idx, e.target.value)}
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

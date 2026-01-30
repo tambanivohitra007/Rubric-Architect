@@ -28,11 +28,22 @@ export interface AttachedFile {
   data: string; // Base64 string without prefix
 }
 
+export type RubricType = 
+  | 'Analytic' 
+  | 'Holistic' 
+  | 'SinglePoint' 
+  | 'Developmental' 
+  | 'Checklist' 
+  | 'CriterionReferenced' 
+  | 'NormReferenced' 
+  | 'TaskSpecific';
+
 export interface RubricData {
   topic: string; // Assignment Title
   courseName: string; // e.g. "Advanced Macroeconomics"
   contextMaterial: string; // Typed/Pasted text
   attachedFile: AttachedFile | null; // Uploaded file
+  rubricType: RubricType;
   outcomes: LearningOutcome[];
   criteria: Criterion[];
   rows: RubricRow[];

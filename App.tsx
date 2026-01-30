@@ -15,6 +15,7 @@ const App: React.FC = () => {
     courseName: '',
     contextMaterial: '',
     attachedFile: null,
+    rubricType: 'Analytic',
     outcomes: [],
     criteria: [],
     rows: [],
