@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { RubricData } from '../types';
+import { RubricData, AnchorExample } from '../types';
 import { generateRubricRows } from '../services/geminiService';
-import { Wand2, Loader2, ChevronRight, AlertCircle, RefreshCw } from 'lucide-react';
+import { Wand2, Loader2, ChevronRight, AlertCircle, RefreshCw, FileText, Plus, X, ChevronDown } from 'lucide-react';
 
 interface Props {
   data: RubricData;
@@ -13,8 +13,29 @@ interface Props {
 const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  
+  const [showAnchors, setShowAnchors] = useState((data.anchorExamples?.length || 0) > 0);
+
   const hasRows = data.rows.length > 0;
+
+  const addAnchorExample = (levelTitle: string) => {
+    const newAnchor: AnchorExample = {
+      id: Date.now().toString(),
+      levelTitle,
+      content: ''
+    };
+    updateData({ anchorExamples: [...(data.anchorExamples || []), newAnchor] });
+  };
+
+  const updateAnchorExample = (id: string, content: string) => {
+    const updated = (data.anchorExamples || []).map(a =>
+      a.id === id ? { ...a, content } : a
+    );
+    updateData({ anchorExamples: updated });
+  };
+
+  const removeAnchorExample = (id: string) => {
+    updateData({ anchorExamples: (data.anchorExamples || []).filter(a => a.id !== id) });
+  };
 
   const handleGenerateLevels = async () => {
     setIsLoading(true);
@@ -189,6 +210,83 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
               )}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Anchor Examples Section */}
+      {hasRows && (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setShowAnchors(!showAnchors)}
+            className="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-amber-50 rounded-lg">
+                <FileText className="w-4 h-4 text-amber-600" />
+              </div>
+              <div className="text-left">
+                <p className="font-medium text-slate-800">Anchor Examples (Optional)</p>
+                <p className="text-xs text-slate-500">Add sample responses to illustrate each performance level</p>
+              </div>
+              {(data.anchorExamples?.length || 0) > 0 && (
+                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs rounded-full">
+                  {data.anchorExamples?.length} added
+                </span>
+              )}
+            </div>
+            <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${showAnchors ? 'rotate-180' : ''}`} />
+          </button>
+
+          {showAnchors && (
+            <div className="p-4 border-t border-slate-100 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
+              <p className="text-sm text-slate-600">
+                Anchor examples help calibrate grading by showing what responses at each level look like.
+              </p>
+
+              {/* Add buttons for each level */}
+              <div className="flex flex-wrap gap-2">
+                {data.scale.map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => addAnchorExample(level)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-slate-100 hover:bg-teal-50 text-slate-600 hover:text-teal-700 rounded-lg transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    {level}
+                  </button>
+                ))}
+              </div>
+
+              {/* List of anchor examples */}
+              {(data.anchorExamples?.length || 0) > 0 && (
+                <div className="space-y-3 mt-4">
+                  {data.anchorExamples?.map((anchor) => (
+                    <div key={anchor.id} className="bg-slate-50 rounded-lg border border-slate-200 p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-xs font-medium rounded">
+                          {anchor.levelTitle}
+                        </span>
+                        <button
+                          onClick={() => removeAnchorExample(anchor.id)}
+                          className="text-slate-400 hover:text-red-500 transition-colors"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <textarea
+                        value={anchor.content}
+                        onChange={(e) => updateAnchorExample(anchor.id, e.target.value)}
+                        placeholder={`Example response demonstrating "${anchor.levelTitle}" performance...`}
+                        className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none resize-none min-h-[80px]"
+                        rows={3}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 

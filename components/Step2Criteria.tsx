@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Criterion, RubricData } from '../types';
 import { generateCriteriaSuggestions } from '../services/geminiService';
-import { Wand2, Plus, X, Loader2, CheckCircle2 } from 'lucide-react';
+import { Wand2, Plus, X, Loader2, CheckCircle2, Percent, AlertTriangle } from 'lucide-react';
 
 interface Props {
   data: RubricData;
@@ -14,6 +14,34 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [hasGenerated, setHasGenerated] = useState(data.criteria.length > 0);
+  const [showWeights, setShowWeights] = useState(data.criteria.some(c => c.weight !== undefined));
+
+  // Calculate total weight
+  const totalWeight = data.criteria.reduce((sum, c) => sum + (c.weight || 0), 0);
+  const isWeightValid = Math.abs(totalWeight - 100) < 0.01 || data.criteria.length === 0;
+
+  // Distribute weights equally among criteria
+  const distributeWeightsEqually = useCallback(() => {
+    if (data.criteria.length === 0) return;
+    const equalWeight = Math.floor(100 / data.criteria.length);
+    const remainder = 100 - (equalWeight * data.criteria.length);
+
+    const updated = data.criteria.map((c, idx) => ({
+      ...c,
+      weight: equalWeight + (idx === 0 ? remainder : 0)
+    }));
+    updateData({ criteria: updated });
+  }, [data.criteria.length, updateData]);
+
+  // Auto-distribute when enabling weights or when criteria count changes
+  useEffect(() => {
+    if (showWeights && data.criteria.length > 0) {
+      const hasWeights = data.criteria.every(c => c.weight !== undefined && c.weight > 0);
+      if (!hasWeights) {
+        distributeWeightsEqually();
+      }
+    }
+  }, [showWeights, data.criteria.length]);
 
   const handleGenerate = async () => {
     setIsLoading(true);
@@ -41,7 +69,8 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
     const newCrit: Criterion = {
       id: Date.now().toString(),
       title: 'New Criterion',
-      description: 'Description of assessment...'
+      description: 'Description of assessment...',
+      weight: showWeights ? 0 : undefined
     };
     updateData({ criteria: [...data.criteria, newCrit] });
   };
@@ -52,6 +81,12 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
 
   const updateCriterion = (id: string, field: keyof Criterion, value: string) => {
     const updated = data.criteria.map(c => c.id === id ? { ...c, [field]: value } : c);
+    updateData({ criteria: updated });
+  };
+
+  const updateCriterionWeight = (id: string, weight: number) => {
+    const clampedWeight = Math.max(0, Math.min(100, weight));
+    const updated = data.criteria.map(c => c.id === id ? { ...c, weight: clampedWeight } : c);
     updateData({ criteria: updated });
   };
 
@@ -95,6 +130,55 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
              </div>
           </div>
 
+          {/* Weighting Toggle */}
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-teal-50 rounded-lg">
+                  <Percent className="w-4 h-4 text-teal-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-slate-800">Criterion Weighting</p>
+                  <p className="text-xs text-slate-500">Assign percentage weights to each criterion</p>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showWeights}
+                  onChange={(e) => setShowWeights(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+              </label>
+            </div>
+
+            {showWeights && (
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-slate-700">Total:</span>
+                    <span className={`text-sm font-bold ${isWeightValid ? 'text-green-600' : 'text-amber-600'}`}>
+                      {totalWeight.toFixed(0)}%
+                    </span>
+                    {!isWeightValid && (
+                      <span className="text-xs text-amber-600 flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3" />
+                        Must equal 100%
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    onClick={distributeWeightsEqually}
+                    className="text-xs px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded transition-colors"
+                  >
+                    Distribute Equally
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 gap-4">
             {data.criteria.map((crit) => (
               <div key={crit.id} className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-teal-300 transition-colors group relative">
@@ -105,22 +189,41 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
                 >
                   <X className="w-5 h-5" />
                 </button>
-                
-                <div className="space-y-3 pr-8">
-                  <input
-                    type="text"
-                    value={crit.title}
-                    onChange={(e) => updateCriterion(crit.id, 'title', e.target.value)}
-                    className="w-full font-semibold text-lg text-slate-800 border-none p-0 focus:ring-0 placeholder:text-slate-300"
-                    placeholder="Criterion Title"
-                  />
-                  <textarea
-                    value={crit.description}
-                    onChange={(e) => updateCriterion(crit.id, 'description', e.target.value)}
-                    className="w-full text-sm text-slate-600 border-none p-0 focus:ring-0 resize-none bg-transparent placeholder:text-slate-300"
-                    placeholder="Describe what is being assessed..."
-                    rows={2}
-                  />
+
+                <div className="flex gap-4">
+                  <div className="flex-1 space-y-3 pr-8">
+                    <input
+                      type="text"
+                      value={crit.title}
+                      onChange={(e) => updateCriterion(crit.id, 'title', e.target.value)}
+                      className="w-full font-semibold text-lg text-slate-800 border-none p-0 focus:ring-0 placeholder:text-slate-300"
+                      placeholder="Criterion Title"
+                    />
+                    <textarea
+                      value={crit.description}
+                      onChange={(e) => updateCriterion(crit.id, 'description', e.target.value)}
+                      className="w-full text-sm text-slate-600 border-none p-0 focus:ring-0 resize-none bg-transparent placeholder:text-slate-300"
+                      placeholder="Describe what is being assessed..."
+                      rows={2}
+                    />
+                  </div>
+
+                  {showWeights && (
+                    <div className="flex flex-col items-center justify-center border-l border-slate-100 pl-4 min-w-[80px]">
+                      <label className="text-[10px] uppercase tracking-wide text-slate-400 mb-1">Weight</label>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={crit.weight ?? 0}
+                          onChange={(e) => updateCriterionWeight(crit.id, parseFloat(e.target.value) || 0)}
+                          className="w-16 text-center py-1.5 text-sm font-medium border border-slate-200 rounded-lg focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
+                        />
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-slate-400">%</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

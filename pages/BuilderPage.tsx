@@ -19,6 +19,10 @@ const defaultRubricData: RubricData = {
   criteria: [],
   rows: [],
   scale: ['Emerging', 'Developing', 'Proficient', 'Mastery'],
+  studentInstructions: '',
+  graderInstructions: '',
+  includeFeedbackSection: false,
+  anchorExamples: [],
 };
 
 export function BuilderPage() {

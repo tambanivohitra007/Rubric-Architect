@@ -7,6 +7,7 @@ export interface Criterion {
   id: string;
   title: string;
   description: string;
+  weight?: number; // Percentage weight (0-100)
 }
 
 export interface PerformanceLevel {
@@ -28,15 +29,24 @@ export interface AttachedFile {
   data: string; // Base64 string without prefix
 }
 
-export type RubricType = 
-  | 'Analytic' 
-  | 'Holistic' 
-  | 'SinglePoint' 
-  | 'Developmental' 
-  | 'Checklist' 
-  | 'CriterionReferenced' 
-  | 'NormReferenced' 
+export type RubricType =
+  | 'Analytic'
+  | 'Holistic'
+  | 'SinglePoint'
+  | 'Developmental'
+  | 'Checklist'
+  | 'CriterionReferenced'
+  | 'NormReferenced'
   | 'TaskSpecific';
+
+export interface AnchorExample {
+  id: string;
+  levelTitle: string; // e.g., "Exemplary"
+  content: string;
+  criterionId?: string; // optional: specific to one criterion
+}
+
+export type ExportMode = 'full' | 'student' | 'grader';
 
 export interface RubricData {
   topic: string; // Assignment Title
@@ -48,6 +58,13 @@ export interface RubricData {
   criteria: Criterion[];
   rows: RubricRow[];
   scale: string[]; // e.g., ["Needs Improvement", "Developing", "Proficient", "Advanced"]
+  // Instructions for different audiences
+  studentInstructions?: string;
+  graderInstructions?: string;
+  // Export options
+  includeFeedbackSection?: boolean;
+  // Anchor examples for performance levels
+  anchorExamples?: AnchorExample[];
   // Firebase fields
   id?: string; // Firestore document ID
   userId?: string; // Owner's Firebase UID

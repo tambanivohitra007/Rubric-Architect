@@ -5,7 +5,8 @@
       "Bash(npx tsc:*)",
       "Bash(npm ls:*)",
       "Bash(npm run build:*)",
-      "Bash(timeout 10 npm run dev:*)"
+      "Bash(timeout 10 npm run dev:*)",
+      "Bash(dir:*)"
     ]
   }
 }

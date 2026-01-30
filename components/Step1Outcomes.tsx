@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { RubricData, RubricType } from '../types';
-import { Plus, Trash2, BookOpen, School, Target, Upload, FileText, Settings2, Sliders, Hash, LayoutTemplate } from 'lucide-react';
+import { Plus, Trash2, BookOpen, School, Target, Upload, FileText, Settings2, Sliders, Hash, LayoutTemplate, ChevronDown, Users, UserCheck } from 'lucide-react';
 
 interface Props {
   data: RubricData;
@@ -109,6 +109,9 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
   const [newOutcome, setNewOutcome] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showInstructions, setShowInstructions] = useState(
+    !!(data.studentInstructions || data.graderInstructions)
+  );
 
   // Scale State
   const [scaleStrategy, setScaleStrategy] = useState('Standard');
@@ -456,6 +459,56 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
                 </div>
              )}
           </div>
+        </div>
+
+        {/* Instructions Section */}
+        <div className="space-y-3">
+          <button
+            type="button"
+            onClick={() => setShowInstructions(!showInstructions)}
+            className="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-teal-600" />
+              <span className="text-sm font-medium text-slate-700">Instructions (Optional)</span>
+              {(data.studentInstructions || data.graderInstructions) && (
+                <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-xs rounded-full">Added</span>
+              )}
+            </div>
+            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showInstructions ? 'rotate-180' : ''}`} />
+          </button>
+
+          {showInstructions && (
+            <div className="space-y-4 p-4 bg-slate-50 rounded-lg border border-slate-200 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                  <Users className="w-4 h-4 text-blue-600" />
+                  Student Instructions
+                </label>
+                <textarea
+                  className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all min-h-[80px] text-sm"
+                  placeholder="Instructions visible to students when viewing the rubric..."
+                  value={data.studentInstructions || ''}
+                  onChange={(e) => updateData({ studentInstructions: e.target.value })}
+                />
+                <p className="text-xs text-slate-400">Explain how students should use this rubric for self-assessment or understanding expectations.</p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                  <UserCheck className="w-4 h-4 text-amber-600" />
+                  Grader Instructions
+                </label>
+                <textarea
+                  className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all min-h-[80px] text-sm"
+                  placeholder="Instructions for graders/instructors when applying this rubric..."
+                  value={data.graderInstructions || ''}
+                  onChange={(e) => updateData({ graderInstructions: e.target.value })}
+                />
+                <p className="text-xs text-slate-400">Provide calibration notes, common issues to watch for, or grading guidelines.</p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Outcomes */}
