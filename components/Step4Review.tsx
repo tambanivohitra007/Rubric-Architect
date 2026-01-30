@@ -80,7 +80,7 @@ const Step4Review: React.FC<Props> = ({ data, updateData, onBack, onSaveSuccess 
     const fileDownload = document.createElement("a");
     document.body.appendChild(fileDownload);
     fileDownload.href = source;
-    fileDownload.download = `${data.topic.replace(/\s+/g, '_')}_rubric.doc`;
+    fileDownload.download = `${data.topic.replace(/\s+/g, '_')}_rubric.docx`;
     fileDownload.click();
     document.body.removeChild(fileDownload);
   };
