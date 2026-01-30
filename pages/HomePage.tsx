@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { Layers } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { LoginButton } from '../components/auth/LoginButton';
+import { AuthForm } from '../components/auth/AuthForm';
 
 export function HomePage() {
   const { isAuthenticated, loading } = useAuth();
@@ -21,7 +21,7 @@ export function HomePage() {
   }
 
   return (
-    <div className="flex-1 flex items-center justify-center relative">
+    <div className="flex-1 flex items-center justify-center relative py-8">
       {/* Grid Pattern Background */}
       <div className="absolute inset-0 opacity-[0.03]">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +39,7 @@ export function HomePage() {
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-slate-100 rounded-full blur-3xl opacity-50" />
 
       {/* Login Card */}
-      <div className="relative bg-white rounded-2xl shadow-xl border border-slate-200 p-8 w-full max-w-sm mx-4">
+      <div className="relative bg-white rounded-2xl shadow-xl border border-slate-200 p-8 w-full max-w-md mx-4">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <div className="bg-indigo-600 p-3 rounded-xl shadow-lg shadow-indigo-200">
@@ -54,12 +54,7 @@ export function HomePage() {
           </p>
         </div>
 
-        <div className="space-y-4">
-          <LoginButton />
-          <p className="text-center text-xs text-slate-400">
-            Sign in with your Google account to continue
-          </p>
-        </div>
+        <AuthForm />
       </div>
     </div>
   );
