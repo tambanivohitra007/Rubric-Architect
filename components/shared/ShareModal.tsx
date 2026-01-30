@@ -77,8 +77,8 @@ export function ShareModal({ rubricId, shareId, isPublic, onClose, onUpdate }: P
           <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
             <div className="flex items-center gap-3">
               {localIsPublic ? (
-                <div className="bg-purple-100 p-2 rounded-lg">
-                  <Globe className="w-5 h-5 text-purple-600" />
+                <div className="bg-amber-100 p-2 rounded-lg">
+                  <Globe className="w-5 h-5 text-amber-600" />
                 </div>
               ) : (
                 <div className="bg-slate-200 p-2 rounded-lg">
@@ -100,7 +100,7 @@ export function ShareModal({ rubricId, shareId, isPublic, onClose, onUpdate }: P
               onClick={handleToggleSharing}
               disabled={loading}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                localIsPublic ? 'bg-purple-600' : 'bg-slate-300'
+                localIsPublic ? 'bg-amber-500' : 'bg-slate-300'
               } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <span
@@ -127,7 +127,7 @@ export function ShareModal({ rubricId, shareId, isPublic, onClose, onUpdate }: P
                   className={`px-3 py-2 rounded-lg font-medium transition-colors text-sm ${
                     copied
                       ? 'bg-green-100 text-green-700'
-                      : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                      : 'bg-teal-600 text-white hover:bg-teal-700'
                   }`}
                 >
                   {copied ? (
@@ -152,7 +152,7 @@ export function ShareModal({ rubricId, shareId, isPublic, onClose, onUpdate }: P
 
           {loading && (
             <div className="flex items-center justify-center py-4">
-              <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
+              <Loader2 className="w-6 h-6 text-teal-600 animate-spin" />
             </div>
           )}
         </div>

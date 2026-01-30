@@ -268,7 +268,7 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
         {/* Templates */}
         <div className="space-y-3">
           <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-            <LayoutTemplate className="w-4 h-4 text-indigo-600" />
+            <LayoutTemplate className="w-4 h-4 text-teal-600" />
             Quick Start Templates
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -276,12 +276,12 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
               <button
                 key={t.id}
                 onClick={() => applyTemplate(t.id)}
-                className="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all text-center gap-2 group"
+                className="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 hover:border-teal-400 hover:bg-teal-50 transition-all text-center gap-2 group"
               >
-                <div className="p-2 bg-slate-100 rounded-full group-hover:bg-indigo-100 transition-colors">
-                  <t.icon className="w-5 h-5 text-slate-500 group-hover:text-indigo-600" />
+                <div className="p-2 bg-slate-100 rounded-full group-hover:bg-teal-100 transition-colors">
+                  <t.icon className="w-5 h-5 text-slate-500 group-hover:text-teal-600" />
                 </div>
-                <span className="text-xs font-medium text-slate-700 group-hover:text-indigo-800">{t.label}</span>
+                <span className="text-xs font-medium text-slate-700 group-hover:text-teal-800">{t.label}</span>
               </button>
             ))}
           </div>
@@ -293,12 +293,12 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-              <School className="w-4 h-4 text-indigo-600" />
+              <School className="w-4 h-4 text-teal-600" />
               Course Name / Code
             </label>
             <input
               type="text"
-              className="w-full px-4 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+              className="w-full px-4 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
               placeholder="e.g. HIST302: Modern European History"
               value={data.courseName}
               onChange={(e) => updateData({ courseName: e.target.value })}
@@ -307,12 +307,12 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
           
           <div className="space-y-2">
             <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-indigo-600" />
+              <BookOpen className="w-4 h-4 text-teal-600" />
               Assignment Title
             </label>
             <input
               type="text"
-              className="w-full px-4 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+              className="w-full px-4 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
               placeholder="e.g. Research Term Paper"
               value={data.topic}
               onChange={(e) => updateData({ topic: e.target.value })}
@@ -323,11 +323,11 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
         {/* Rubric Type */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-            <Settings2 className="w-4 h-4 text-indigo-600" />
+            <Settings2 className="w-4 h-4 text-teal-600" />
             Rubric Type
           </label>
           <select 
-            className="w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+            className="w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
             value={data.rubricType}
             onChange={(e) => handleTypeChange(e.target.value as RubricType)}
           >
@@ -342,7 +342,7 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
           <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-4">
              <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                  <Sliders className="w-4 h-4 text-indigo-600" />
+                  <Sliders className="w-4 h-4 text-teal-600" />
                   Scoring Scale
                 </label>
                 <div className="flex gap-2">
@@ -376,7 +376,7 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
                       type="text" 
                       value={level}
                       onChange={(e) => updateScaleLabel(idx, e.target.value)}
-                      className="w-full px-2 py-1.5 text-sm text-center bg-white border border-slate-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
+                      className="w-full px-2 py-1.5 text-sm text-center bg-white border border-slate-300 rounded-md focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none"
                     />
                   </div>
                 ))}
@@ -394,11 +394,11 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
         {/* Materials */}
         <div className="space-y-3">
           <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-            <FileText className="w-4 h-4 text-indigo-600" />
+            <FileText className="w-4 h-4 text-teal-600" />
             Course Materials
           </label>
           <textarea 
-            className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all min-h-[100px] text-sm font-mono"
+            className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all min-h-[100px] text-sm font-mono"
             placeholder="Paste assignment instructions, syllabus details, or reading material text here..."
             value={data.contextMaterial}
             onChange={(e) => updateData({ contextMaterial: e.target.value })}
@@ -412,8 +412,8 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
             className={`
               relative border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer group
               ${isDragging 
-                ? 'border-indigo-500 bg-indigo-50 scale-[1.01]' 
-                : 'border-slate-300 hover:border-indigo-400 hover:bg-slate-50'
+                ? 'border-teal-500 bg-teal-50 scale-[1.01]' 
+                : 'border-slate-300 hover:border-teal-400 hover:bg-slate-50'
               }
               ${data.attachedFile ? 'bg-white cursor-default hover:bg-white hover:border-slate-300' : 'bg-white'}
             `}
@@ -428,8 +428,8 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
 
              {!data.attachedFile ? (
                <div className="flex flex-col items-center gap-2 pointer-events-none">
-                 <div className={`p-3 rounded-full transition-colors ${isDragging ? 'bg-indigo-200' : 'bg-slate-100 group-hover:bg-indigo-50'}`}>
-                    <Upload className={`w-6 h-6 ${isDragging ? 'text-indigo-600' : 'text-slate-400 group-hover:text-indigo-500'}`} />
+                 <div className={`p-3 rounded-full transition-colors ${isDragging ? 'bg-teal-200' : 'bg-slate-100 group-hover:bg-teal-50'}`}>
+                    <Upload className={`w-6 h-6 ${isDragging ? 'text-teal-600' : 'text-slate-400 group-hover:text-teal-500'}`} />
                  </div>
                  <div>
                    <p className="text-sm font-medium text-slate-700">Click to upload or drag & drop</p>
@@ -437,10 +437,10 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
                  </div>
                </div>
              ) : (
-                <div className="flex items-center justify-between bg-white p-3 rounded-lg border border-indigo-100 shadow-sm w-full" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between bg-white p-3 rounded-lg border border-teal-100 shadow-sm w-full" onClick={(e) => e.stopPropagation()}>
                    <div className="flex items-center gap-3 overflow-hidden">
-                      <div className="p-2.5 bg-indigo-100 rounded-lg shrink-0">
-                        <FileText className="w-5 h-5 text-indigo-600" />
+                      <div className="p-2.5 bg-teal-100 rounded-lg shrink-0">
+                        <FileText className="w-5 h-5 text-teal-600" />
                       </div>
                       <div className="text-left overflow-hidden">
                         <p className="text-sm font-medium text-slate-800 truncate" title={data.attachedFile.name}>{data.attachedFile.name}</p>
@@ -461,13 +461,13 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
         {/* Outcomes */}
         <div className="space-y-3 pt-2">
           <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-            <Target className="w-4 h-4 text-indigo-600" />
+            <Target className="w-4 h-4 text-teal-600" />
             Learning Outcomes
           </label>
           <div className="flex gap-2">
             <input
               type="text"
-              className="flex-1 px-4 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              className="flex-1 px-4 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none"
               placeholder="e.g. Students can critically analyze primary sources..."
               value={newOutcome}
               onChange={(e) => setNewOutcome(e.target.value)}
@@ -483,8 +483,8 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
           </div>
           <div className="space-y-2 mt-4">
             {data.outcomes.map((outcome) => (
-              <div key={outcome.id} className="flex items-start gap-3 p-3 bg-indigo-50/50 rounded-lg border border-indigo-100 group">
-                <div className="mt-1 w-2 h-2 rounded-full bg-indigo-500 shrink-0" />
+              <div key={outcome.id} className="flex items-start gap-3 p-3 bg-teal-50/50 rounded-lg border border-teal-100 group">
+                <div className="mt-1 w-2 h-2 rounded-full bg-teal-500 shrink-0" />
                 <span className="flex-1 text-slate-700 text-sm">{outcome.text}</span>
                 <button
                   onClick={() => removeOutcome(outcome.id)}
@@ -508,7 +508,7 @@ const Step1Outcomes: React.FC<Props> = ({ data, updateData, onNext }) => {
         <button
           onClick={onNext}
           disabled={!isFormValid}
-          className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium shadow-md shadow-indigo-200 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          className="px-6 py-2.5 bg-teal-600 text-white rounded-lg font-medium shadow-md shadow-teal-200 hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
           Next: Generate Criteria
         </button>

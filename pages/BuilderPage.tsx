@@ -81,7 +81,7 @@ export function BuilderPage() {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Loading rubric...</p>
         </div>
       </div>
@@ -95,7 +95,7 @@ export function BuilderPage() {
           <p className="text-red-600 mb-4">{error}</p>
           <button
             onClick={() => navigate('/builder')}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
           >
             Create New Rubric
           </button>

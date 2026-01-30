@@ -64,8 +64,8 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
 
       {!hasGenerated && data.criteria.length === 0 ? (
         <div className="flex flex-col items-center justify-center p-12 bg-white rounded-xl shadow-sm border border-slate-200 text-center space-y-4">
-          <div className="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center">
-            <Wand2 className="w-8 h-8 text-indigo-600" />
+          <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center">
+            <Wand2 className="w-8 h-8 text-teal-600" />
           </div>
           <div className="max-w-md">
             <h3 className="text-lg font-semibold text-slate-800">AI Assistance Ready</h3>
@@ -76,7 +76,7 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
           <button
             onClick={handleGenerate}
             disabled={isLoading}
-            className="mt-4 px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium shadow-md shadow-indigo-200 hover:bg-indigo-700 disabled:opacity-70 transition-all flex items-center gap-2"
+            className="mt-4 px-6 py-3 bg-teal-600 text-white rounded-lg font-medium shadow-md shadow-teal-200 hover:bg-teal-700 disabled:opacity-70 transition-all flex items-center gap-2"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Wand2 className="w-5 h-5" />}
             {isLoading ? 'Analyzing Materials...' : 'Generate Criteria Suggestions'}
@@ -97,7 +97,7 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
 
           <div className="grid grid-cols-1 gap-4">
             {data.criteria.map((crit) => (
-              <div key={crit.id} className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-indigo-300 transition-colors group relative">
+              <div key={crit.id} className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-teal-300 transition-colors group relative">
                 <button
                   onClick={() => removeCriterion(crit.id)}
                   className="absolute top-4 right-4 text-slate-300 hover:text-red-500 transition-colors"
@@ -127,7 +127,7 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
             
             <button
               onClick={addCriterion}
-              className="w-full py-4 border-2 border-dashed border-slate-300 rounded-xl text-slate-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all flex items-center justify-center gap-2 font-medium"
+              className="w-full py-4 border-2 border-dashed border-slate-300 rounded-xl text-slate-500 hover:border-teal-400 hover:text-teal-600 hover:bg-teal-50/30 transition-all flex items-center justify-center gap-2 font-medium"
             >
               <Plus className="w-5 h-5" />
               Add Manually
@@ -138,7 +138,7 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
              <button
                onClick={handleGenerate}
                disabled={isLoading}
-               className="text-sm text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-medium disabled:opacity-50"
+               className="text-sm text-teal-600 hover:text-teal-800 flex items-center gap-1 font-medium disabled:opacity-50"
              >
                <Wand2 className="w-4 h-4" />
                Regenerate Suggestions
@@ -160,7 +160,7 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
         <button
           onClick={onNext}
           disabled={data.criteria.length === 0}
-          className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium shadow-md shadow-indigo-200 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          className="px-6 py-2.5 bg-teal-600 text-white rounded-lg font-medium shadow-md shadow-teal-200 hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
           Next: Define Levels
         </button>

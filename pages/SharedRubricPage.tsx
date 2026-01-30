@@ -38,7 +38,7 @@ export function SharedRubricPage() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Loading rubric...</p>
         </div>
       </div>
@@ -48,7 +48,7 @@ export function SharedRubricPage() {
   if (error || !rubric) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col">
-        <header className="bg-indigo-600 sticky top-0 z-30">
+        <header className="bg-slate-900 sticky top-0 z-30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center">
             <Link to="/" className="flex items-center gap-2">
               <div className="bg-white/20 p-1.5 rounded-lg">
@@ -69,7 +69,7 @@ export function SharedRubricPage() {
             <p className="text-slate-600 mb-6">{error}</p>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Go to Home
@@ -83,7 +83,7 @@ export function SharedRubricPage() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* Header */}
-      <header className="no-print bg-indigo-600 sticky top-0 z-30">
+      <header className="no-print bg-slate-900 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <div className="bg-white/20 p-1.5 rounded-lg">
@@ -91,7 +91,7 @@ export function SharedRubricPage() {
             </div>
             <h1 className="text-xl font-bold text-white">RubricArchitect</h1>
           </Link>
-          <div className="text-indigo-200 text-sm">
+          <div className="text-slate-400 text-sm">
             Shared Rubric (Read-only)
           </div>
         </div>
@@ -105,7 +105,7 @@ export function SharedRubricPage() {
             <p className="text-slate-600">{rubric.courseName}</p>
           )}
           <div className="mt-4 flex flex-wrap gap-2">
-            <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
+            <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm font-medium">
               {rubric.rubricType}
             </span>
             <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm">
@@ -124,7 +124,7 @@ export function SharedRubricPage() {
             <ul className="space-y-2">
               {rubric.outcomes.map((outcome, index) => (
                 <li key={outcome.id} className="flex gap-3 text-slate-700">
-                  <span className="text-indigo-600 font-medium">{index + 1}.</span>
+                  <span className="text-teal-600 font-medium">{index + 1}.</span>
                   {outcome.text}
                 </li>
               ))}

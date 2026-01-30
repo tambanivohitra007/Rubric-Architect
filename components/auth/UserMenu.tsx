@@ -61,7 +61,7 @@ export function UserMenu() {
       <div className="relative" ref={menuRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 transition-colors"
         >
           {user.photoURL ? (
             <img
@@ -70,7 +70,7 @@ export function UserMenu() {
               className="w-8 h-8 rounded-full"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-indigo-400 flex items-center justify-center text-white font-medium">
+            <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center text-white font-medium">
               {user.displayName?.[0] || user.email?.[0] || 'U'}
             </div>
           )}

@@ -127,7 +127,7 @@ const Step4Review: React.FC<Props> = ({ data, updateData, onBack, onSaveSuccess 
         <div className="flex flex-wrap items-center justify-between gap-2">
           <button
             onClick={onBack}
-            className="text-slate-500 hover:text-indigo-600 flex items-center gap-2 font-medium px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors text-sm"
+            className="text-slate-500 hover:text-teal-600 flex items-center gap-2 font-medium px-3 py-2 rounded-lg hover:bg-teal-50 transition-colors text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="hidden xs:inline">Back to Editing</span>
@@ -161,8 +161,8 @@ const Step4Review: React.FC<Props> = ({ data, updateData, onBack, onSaveSuccess 
                     onClick={() => setShowShareModal(true)}
                     className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2 rounded-lg font-medium transition-colors text-sm ${
                       data.isPublic
-                        ? 'bg-purple-600 text-white hover:bg-purple-700'
-                        : 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                        ? 'bg-amber-500 text-white hover:bg-amber-600'
+                        : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
                     }`}
                   >
                     <Share2 className="w-4 h-4" />
@@ -198,7 +198,7 @@ const Step4Review: React.FC<Props> = ({ data, updateData, onBack, onSaveSuccess 
           <button
             onClick={handlePDFExport}
             disabled={isExporting}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium transition-colors text-xs sm:text-sm disabled:opacity-70"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 font-medium transition-colors text-xs sm:text-sm disabled:opacity-70"
           >
             {isExporting ? <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" /> : <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
             PDF

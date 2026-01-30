@@ -97,13 +97,13 @@ export function AuthForm() {
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900">Check your email</h3>
-        <p className="text-sm text-gray-600">
+        <h3 className="text-lg font-semibold text-slate-900">Check your email</h3>
+        <p className="text-sm text-slate-600">
           We've sent a password reset link to <strong>{email}</strong>
         </p>
         <button
           onClick={() => switchMode('signin')}
-          className="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+          className="inline-flex items-center gap-2 text-sm font-medium text-teal-600 hover:text-teal-700"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to sign in
@@ -117,19 +117,19 @@ export function AuthForm() {
     return (
       <div className="space-y-6">
         <div className="text-center">
-          <h3 className="text-lg font-semibold text-gray-900">Reset your password</h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <h3 className="text-lg font-semibold text-slate-900">Reset your password</h3>
+          <p className="text-sm text-slate-600 mt-1">
             Enter your email and we'll send you a reset link
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               <input
                 id="email"
                 type="email"
@@ -137,7 +137,7 @@ export function AuthForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
               />
             </div>
           </div>
@@ -151,7 +151,7 @@ export function AuthForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading && <Loader2 className="w-5 h-5 animate-spin" />}
             Send Reset Link
@@ -160,7 +160,7 @@ export function AuthForm() {
 
         <button
           onClick={() => switchMode('signin')}
-          className="w-full inline-flex items-center justify-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900"
+          className="w-full inline-flex items-center justify-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to sign in
@@ -210,7 +210,7 @@ export function AuthForm() {
           <div className="w-full border-t border-gray-200" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-3 bg-white text-gray-500">or</span>
+          <span className="px-3 bg-white text-slate-500">or</span>
         </div>
       </div>
 
@@ -218,29 +218,29 @@ export function AuthForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {mode === 'signup' && (
           <div>
-            <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="displayName" className="block text-sm font-medium text-slate-700 mb-1">
               Name
             </label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               <input
                 id="displayName"
                 type="text"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="Your name"
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
               />
             </div>
           </div>
         )}
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
             Email
           </label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
               id="email"
               type="email"
@@ -248,28 +248,28 @@ export function AuthForm() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
               required
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+              className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
             />
           </div>
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-slate-700">
               Password
             </label>
             {mode === 'signin' && (
               <button
                 type="button"
                 onClick={() => switchMode('forgot')}
-                className="text-sm text-indigo-600 hover:text-indigo-700"
+                className="text-sm text-teal-600 hover:text-teal-700"
               >
                 Forgot password?
               </button>
             )}
           </div>
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
               id="password"
               type="password"
@@ -278,7 +278,7 @@ export function AuthForm() {
               placeholder={mode === 'signup' ? 'At least 6 characters' : 'Enter your password'}
               required
               minLength={6}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+              className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
             />
           </div>
         </div>
@@ -292,7 +292,7 @@ export function AuthForm() {
         <button
           type="submit"
           disabled={isLoading || isGoogleLoading}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading && <Loader2 className="w-5 h-5 animate-spin" />}
           {mode === 'signin' ? 'Sign In' : 'Create Account'}
@@ -300,14 +300,14 @@ export function AuthForm() {
       </form>
 
       {/* Toggle Mode */}
-      <p className="text-center text-sm text-gray-600">
+      <p className="text-center text-sm text-slate-600">
         {mode === 'signin' ? (
           <>
             Don't have an account?{' '}
             <button
               type="button"
               onClick={() => switchMode('signup')}
-              className="font-medium text-indigo-600 hover:text-indigo-700"
+              className="font-medium text-teal-600 hover:text-teal-700"
             >
               Sign up
             </button>
@@ -318,7 +318,7 @@ export function AuthForm() {
             <button
               type="button"
               onClick={() => switchMode('signin')}
-              className="font-medium text-indigo-600 hover:text-indigo-700"
+              className="font-medium text-teal-600 hover:text-teal-700"
             >
               Sign in
             </button>

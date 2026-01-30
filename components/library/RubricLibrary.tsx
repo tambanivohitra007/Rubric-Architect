@@ -116,7 +116,7 @@ export function RubricLibrary() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Loading your rubrics...</p>
         </div>
       </div>
@@ -135,7 +135,7 @@ export function RubricLibrary() {
         </div>
         <button
           onClick={() => navigate('/builder')}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors"
         >
           <Plus className="w-5 h-5" />
           New Rubric
@@ -157,7 +157,7 @@ export function RubricLibrary() {
                   placeholder="Search rubrics..."
                   value={filters.searchQuery}
                   onChange={e => setFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
-                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 />
                 {filters.searchQuery && (
                   <button
@@ -174,7 +174,7 @@ export function RubricLibrary() {
                 onClick={() => setShowFilters(!showFilters)}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
                   showFilters || filters.rubricType !== 'all'
-                    ? 'border-indigo-300 bg-indigo-50 text-indigo-700'
+                    ? 'border-teal-300 bg-teal-50 text-teal-700'
                     : 'border-slate-300 text-slate-700 hover:bg-slate-50'
                 }`}
               >
@@ -187,7 +187,7 @@ export function RubricLibrary() {
                 <select
                   value={filters.sortBy}
                   onChange={e => setFilters(prev => ({ ...prev, sortBy: e.target.value as any }))}
-                  className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 >
                   <option value="updatedAt">Last Modified</option>
                   <option value="createdAt">Date Created</option>
@@ -220,7 +220,7 @@ export function RubricLibrary() {
                       onClick={() => setFilters(prev => ({ ...prev, rubricType: type }))}
                       className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                         filters.rubricType === type
-                          ? 'bg-indigo-600 text-white'
+                          ? 'bg-teal-600 text-white'
                           : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                       }`}
                     >
@@ -238,7 +238,7 @@ export function RubricLibrary() {
               <p className="text-slate-600">No rubrics match your search criteria.</p>
               <button
                 onClick={() => setFilters({ searchQuery: '', rubricType: 'all', sortBy: 'updatedAt', sortOrder: 'desc' })}
-                className="mt-4 text-indigo-600 hover:text-indigo-700 font-medium"
+                className="mt-4 text-teal-600 hover:text-teal-700 font-medium"
               >
                 Clear filters
               </button>

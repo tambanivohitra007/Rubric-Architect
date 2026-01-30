@@ -68,7 +68,7 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
         {!hasRows || isLoading ? null : (
           <button
             onClick={handleGenerateLevels}
-            className="text-sm px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-md font-medium transition-colors flex items-center gap-2"
+            className="text-sm px-3 py-1.5 bg-teal-50 text-teal-700 hover:bg-teal-100 rounded-md font-medium transition-colors flex items-center gap-2"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Regenerate All
@@ -78,8 +78,8 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
 
       {!hasRows ? (
         <div className="flex-1 flex flex-col items-center justify-center p-12 bg-white rounded-xl shadow-sm border border-slate-200 text-center min-h-[400px]">
-           <div className="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mb-6">
-            <Wand2 className="w-8 h-8 text-indigo-600" />
+           <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mb-6">
+            <Wand2 className="w-8 h-8 text-teal-600" />
           </div>
           <h3 className="text-xl font-semibold text-slate-800 mb-2">Populate the Grid</h3>
           <p className="text-slate-500 max-w-md mb-8">
@@ -90,7 +90,7 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
           <button
             onClick={handleGenerateLevels}
             disabled={isLoading}
-            className="px-8 py-3.5 bg-indigo-600 text-white rounded-lg font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 disabled:opacity-70 transition-all flex items-center gap-3 transform hover:-translate-y-0.5"
+            className="px-8 py-3.5 bg-teal-600 text-white rounded-lg font-semibold shadow-lg shadow-teal-200 hover:bg-teal-700 disabled:opacity-70 transition-all flex items-center gap-3 transform hover:-translate-y-0.5"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Wand2 className="w-5 h-5" />}
             {isLoading ? 'Generating...' : 'Generate Content'}
@@ -108,8 +108,8 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
           {isLoading && (
             <div className="absolute inset-0 bg-white/80 z-10 flex items-center justify-center backdrop-blur-sm">
               <div className="flex flex-col items-center gap-3">
-                <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
-                <p className="text-indigo-800 font-medium">Refining rubric...</p>
+                <Loader2 className="w-10 h-10 text-teal-600 animate-spin" />
+                <p className="text-teal-800 font-medium">Refining rubric...</p>
               </div>
             </div>
           )}
@@ -157,7 +157,7 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
                       </td>
                       <td className="p-3 align-top">
                         <textarea
-                          className="w-full h-full min-h-[120px] text-sm text-slate-600 bg-transparent border border-transparent hover:border-indigo-100 focus:border-indigo-400 focus:bg-white rounded-md p-2 resize-none outline-none transition-all"
+                          className="w-full h-full min-h-[120px] text-sm text-slate-600 bg-transparent border border-transparent hover:border-teal-100 focus:border-teal-400 focus:bg-white rounded-md p-2 resize-none outline-none transition-all"
                           value={level.description}
                           onChange={(e) => updateCellDescription(data.rows[0].id, idx, e.target.value)}
                         />
@@ -177,7 +177,7 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
                       {row.levels.map((level, idx) => (
                         <td key={level.id} className="p-3 align-top border-r border-slate-100 last:border-r-0 relative">
                           <textarea
-                            className="w-full h-full min-h-[120px] text-sm text-slate-600 bg-transparent border border-transparent hover:border-indigo-100 focus:border-indigo-400 focus:bg-white rounded-md p-2 resize-none outline-none transition-all"
+                            className="w-full h-full min-h-[120px] text-sm text-slate-600 bg-transparent border border-transparent hover:border-teal-100 focus:border-teal-400 focus:bg-white rounded-md p-2 resize-none outline-none transition-all"
                             value={level.description}
                             onChange={(e) => updateCellDescription(row.id, idx, e.target.value)}
                           />
@@ -202,7 +202,7 @@ const Step3Levels: React.FC<Props> = ({ data, updateData, onNext, onBack }) => {
         <button
           onClick={onNext}
           disabled={!hasRows}
-          className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium shadow-md shadow-indigo-200 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+          className="px-6 py-2.5 bg-teal-600 text-white rounded-lg font-medium shadow-md shadow-teal-200 hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
         >
           Next: Review & Export
           <ChevronRight className="w-4 h-4" />

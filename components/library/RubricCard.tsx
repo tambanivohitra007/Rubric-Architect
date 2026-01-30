@@ -150,7 +150,7 @@ export function RubricCard({ rubric, onDelete, onShare, onDuplicate }: Props) {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-4">
-          <span className="inline-flex items-center gap-1 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md text-xs font-medium">
+          <span className="inline-flex items-center gap-1 px-2 py-1 bg-teal-100 text-teal-700 rounded-md text-xs font-medium">
             <Grid3X3 className="w-3 h-3" />
             {rubric.rubricType}
           </span>
@@ -161,7 +161,7 @@ export function RubricCard({ rubric, onDelete, onShare, onDuplicate }: Props) {
             {rubric.scale.length} levels
           </span>
           {rubric.isPublic && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-md text-xs font-medium">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-700 rounded-md text-xs font-medium">
               <Share2 className="w-3 h-3" />
               Shared
             </span>
@@ -178,7 +178,7 @@ export function RubricCard({ rubric, onDelete, onShare, onDuplicate }: Props) {
         <button
           onClick={handleEdit}
           disabled={isLoading}
-          className="w-full py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors disabled:opacity-50"
+          className="w-full py-2 text-sm font-medium text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg transition-colors disabled:opacity-50"
         >
           Open Rubric
         </button>
