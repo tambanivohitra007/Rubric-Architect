@@ -172,3 +172,28 @@ export async function disableSharing(rubricId: string): Promise<void> {
     updatedAt: serverTimestamp(),
   });
 }
+
+export async function duplicateRubric(rubricId: string, userId: string): Promise<string> {
+  const original = await getRubricById(rubricId);
+
+  if (!original) {
+    throw new Error('Rubric not found');
+  }
+
+  // Create a copy with modified title
+  const { id, createdAt, updatedAt, shareId, isPublic, ...rubricData } = original as any;
+
+  const duplicateData = prepareForFirestore({
+    ...rubricData,
+    topic: `${original.topic} (Copy)`,
+    userId,
+    isPublic: false,
+    shareId: null,
+  });
+
+  duplicateData.createdAt = serverTimestamp();
+  duplicateData.updatedAt = serverTimestamp();
+
+  const docRef = await addDoc(collection(db, RUBRICS_COLLECTION), duplicateData);
+  return docRef.id;
+}

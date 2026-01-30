@@ -7,6 +7,7 @@ import {
   getRubricsByUserId,
   enableSharing,
   disableSharing,
+  duplicateRubric,
 } from '../services/firestoreService';
 import { RubricData } from '../types';
 
@@ -119,11 +120,36 @@ export function useRubric() {
     [user]
   );
 
+  const cloneRubric = useCallback(
+    async (rubricId: string): Promise<string | null> => {
+      if (!user) {
+        setError('You must be signed in to duplicate rubrics');
+        return null;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const newId = await duplicateRubric(rubricId, user.uid);
+        return newId;
+      } catch (err) {
+        console.error('Error duplicating rubric:', err);
+        setError('Failed to duplicate rubric');
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user]
+  );
+
   return {
     saveRubric,
     removeRubric,
     fetchUserRubrics,
     toggleSharing,
+    cloneRubric,
     loading,
     error,
     clearError: () => setError(null),

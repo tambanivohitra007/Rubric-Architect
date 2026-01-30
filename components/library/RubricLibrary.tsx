@@ -21,7 +21,7 @@ const RUBRIC_TYPES: (RubricType | 'all')[] = [
 
 export function RubricLibrary() {
   const navigate = useNavigate();
-  const { fetchUserRubrics, removeRubric, loading, error } = useRubric();
+  const { fetchUserRubrics, removeRubric, cloneRubric, loading, error } = useRubric();
 
   const [rubrics, setRubrics] = useState<RubricData[]>([]);
   const [filters, setFilters] = useState<LibraryFilters>({
@@ -46,6 +46,14 @@ export function RubricLibrary() {
     const success = await removeRubric(id);
     if (success) {
       setRubrics(prev => prev.filter(r => r.id !== id));
+    }
+  };
+
+  const handleDuplicate = async (id: string) => {
+    const newId = await cloneRubric(id);
+    if (newId) {
+      // Reload rubrics to show the duplicate
+      await loadRubrics();
     }
   };
 
@@ -243,6 +251,7 @@ export function RubricLibrary() {
                   rubric={rubric}
                   onDelete={handleDelete}
                   onShare={setShareModalRubric}
+                  onDuplicate={handleDuplicate}
                 />
               ))}
             </div>

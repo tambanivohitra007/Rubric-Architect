@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { Loader2, Mail, Lock, User } from 'lucide-react';
+import { Loader2, Mail, Lock, User, ArrowLeft, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { FirebaseError } from 'firebase/app';
 
-type AuthMode = 'signin' | 'signup';
+type AuthMode = 'signin' | 'signup' | 'forgot';
 
 export function AuthForm() {
-  const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
+  const { signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword } = useAuth();
   const [mode, setMode] = useState<AuthMode>('signin');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [resetSent, setResetSent] = useState(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,6 +30,7 @@ export function AuthForm() {
       case 'auth/user-disabled':
         return 'This account has been disabled';
       case 'auth/user-not-found':
+        return 'No account found with this email';
       case 'auth/wrong-password':
       case 'auth/invalid-credential':
         return 'Invalid email or password';
@@ -47,8 +49,11 @@ export function AuthForm() {
     try {
       if (mode === 'signin') {
         await signInWithEmail(email, password);
-      } else {
+      } else if (mode === 'signup') {
         await signUpWithEmail(email, password, displayName || undefined);
+      } else if (mode === 'forgot') {
+        await resetPassword(email);
+        setResetSent(true);
       }
     } catch (err) {
       if (err instanceof FirebaseError) {
@@ -77,10 +82,92 @@ export function AuthForm() {
     }
   };
 
-  const toggleMode = () => {
-    setMode(mode === 'signin' ? 'signup' : 'signin');
+  const switchMode = (newMode: AuthMode) => {
+    setMode(newMode);
     setError(null);
+    setResetSent(false);
   };
+
+  // Forgot Password Success View
+  if (mode === 'forgot' && resetSent) {
+    return (
+      <div className="text-center space-y-4">
+        <div className="flex justify-center">
+          <div className="bg-green-100 p-3 rounded-full">
+            <CheckCircle className="w-8 h-8 text-green-600" />
+          </div>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900">Check your email</h3>
+        <p className="text-sm text-gray-600">
+          We've sent a password reset link to <strong>{email}</strong>
+        </p>
+        <button
+          onClick={() => switchMode('signin')}
+          className="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to sign in
+        </button>
+      </div>
+    );
+  }
+
+  // Forgot Password Form
+  if (mode === 'forgot') {
+    return (
+      <div className="space-y-6">
+        <div className="text-center">
+          <h3 className="text-lg font-semibold text-gray-900">Reset your password</h3>
+          <p className="text-sm text-gray-600 mt-1">
+            Enter your email and we'll send you a reset link
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+              />
+            </div>
+          </div>
+
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading && <Loader2 className="w-5 h-5 animate-spin" />}
+            Send Reset Link
+          </button>
+        </form>
+
+        <button
+          onClick={() => switchMode('signin')}
+          className="w-full inline-flex items-center justify-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to sign in
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -167,9 +254,20 @@ export function AuthForm() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Password
-          </label>
+          <div className="flex items-center justify-between mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            {mode === 'signin' && (
+              <button
+                type="button"
+                onClick={() => switchMode('forgot')}
+                className="text-sm text-indigo-600 hover:text-indigo-700"
+              >
+                Forgot password?
+              </button>
+            )}
+          </div>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -208,7 +306,7 @@ export function AuthForm() {
             Don't have an account?{' '}
             <button
               type="button"
-              onClick={toggleMode}
+              onClick={() => switchMode('signup')}
               className="font-medium text-indigo-600 hover:text-indigo-700"
             >
               Sign up
@@ -219,7 +317,7 @@ export function AuthForm() {
             Already have an account?{' '}
             <button
               type="button"
-              onClick={toggleMode}
+              onClick={() => switchMode('signin')}
               className="font-medium text-indigo-600 hover:text-indigo-700"
             >
               Sign in

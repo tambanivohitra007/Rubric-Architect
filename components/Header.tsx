@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Layers, Plus, Library } from 'lucide-react';
+import { Layers, Plus, Library, Menu, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { UserMenu } from './auth/UserMenu';
 
 export function Header() {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
     <header className="no-print bg-indigo-600 sticky top-0 z-30">
@@ -55,9 +58,61 @@ export function Header() {
               University Assessment Builder
             </span>
           )}
-          {isAuthenticated && <UserMenu />}
+          {isAuthenticated && (
+            <>
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="sm:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </button>
+              <div className="hidden sm:block">
+                <UserMenu />
+              </div>
+            </>
+          )}
         </div>
       </div>
+
+      {/* Mobile menu */}
+      {isAuthenticated && mobileMenuOpen && (
+        <div className="sm:hidden bg-indigo-700 border-t border-indigo-500">
+          <nav className="px-4 py-3 space-y-1">
+            <Link
+              to="/builder"
+              onClick={closeMobileMenu}
+              className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                location.pathname.startsWith('/builder')
+                  ? 'bg-white/20 text-white'
+                  : 'text-indigo-100 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              <Plus className="w-4 h-4" />
+              New Rubric
+            </Link>
+            <Link
+              to="/library"
+              onClick={closeMobileMenu}
+              className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                location.pathname === '/library'
+                  ? 'bg-white/20 text-white'
+                  : 'text-indigo-100 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              <Library className="w-4 h-4" />
+              My Library
+            </Link>
+            <div className="pt-2 border-t border-indigo-500">
+              <UserMenu />
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

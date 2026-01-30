@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Edit, Trash2, Share2, MoreVertical, Eye, Calendar, Grid3X3 } from 'lucide-react';
+import { Edit, Trash2, Share2, MoreVertical, Eye, Calendar, Grid3X3, Copy } from 'lucide-react';
 import { RubricData } from '../../types';
 
 interface Props {
   rubric: RubricData;
   onDelete: (id: string) => void;
   onShare: (rubric: RubricData) => void;
+  onDuplicate: (id: string) => void;
 }
 
-export function RubricCard({ rubric, onDelete, onShare }: Props) {
+export function RubricCard({ rubric, onDelete, onShare, onDuplicate }: Props) {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDuplicating, setIsDuplicating] = useState(false);
 
   const handleEdit = () => {
     navigate(`/builder/${rubric.id}`);
@@ -32,6 +34,17 @@ export function RubricCard({ rubric, onDelete, onShare }: Props) {
     }
   };
 
+  const handleDuplicate = async () => {
+    if (!rubric.id) return;
+
+    setIsDuplicating(true);
+    try {
+      await onDuplicate(rubric.id);
+    } finally {
+      setIsDuplicating(false);
+    }
+  };
+
   const handleViewShared = () => {
     if (rubric.shareId && rubric.isPublic) {
       window.open(`/shared/${rubric.shareId}`, '_blank');
@@ -47,8 +60,10 @@ export function RubricCard({ rubric, onDelete, onShare }: Props) {
     });
   };
 
+  const isLoading = isDeleting || isDuplicating;
+
   return (
-    <div className={`bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow ${isDeleting ? 'opacity-50' : ''}`}>
+    <div className={`bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow ${isLoading ? 'opacity-50' : ''}`}>
       <div className="p-5">
         <div className="flex justify-between items-start mb-3">
           <div className="flex-1 min-w-0">
@@ -84,6 +99,16 @@ export function RubricCard({ rubric, onDelete, onShare }: Props) {
                   >
                     <Edit className="w-4 h-4" />
                     Edit
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDuplicate();
+                      setShowMenu(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                  >
+                    <Copy className="w-4 h-4" />
+                    Duplicate
                   </button>
                   <button
                     onClick={() => {
@@ -152,7 +177,7 @@ export function RubricCard({ rubric, onDelete, onShare }: Props) {
       <div className="border-t border-slate-100 px-5 py-3 bg-slate-50/50 rounded-b-xl">
         <button
           onClick={handleEdit}
-          disabled={isDeleting}
+          disabled={isLoading}
           className="w-full py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors disabled:opacity-50"
         >
           Open Rubric

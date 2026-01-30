@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 import { useAuthContext } from '../contexts/AuthContext';
@@ -50,6 +51,15 @@ export function useAuth() {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.error('Error sending password reset email:', error);
+      throw error;
+    }
+  };
+
   return {
     user,
     loading,
@@ -57,6 +67,7 @@ export function useAuth() {
     signInWithEmail,
     signUpWithEmail,
     logout,
+    resetPassword,
     isAuthenticated: !!user,
   };
 }
