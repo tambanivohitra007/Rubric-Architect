@@ -1,6 +1,5 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { Layers } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { AuthForm } from '../components/auth/AuthForm';
 
@@ -35,9 +34,7 @@ export function HomePage() {
       <div className="relative bg-white rounded-2xl shadow-xl border border-slate-200 p-8 w-full max-w-md mx-4">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="bg-slate-900 p-3 rounded-xl shadow-lg">
-              <Layers className="w-8 h-8 text-teal-400" />
-            </div>
+            <img src="/logo.svg" alt="RubricArchitect" className="w-16 h-16 rounded-xl shadow-lg" />
           </div>
           <h1 className="text-2xl font-bold text-slate-900 mb-2">
             RubricArchitect

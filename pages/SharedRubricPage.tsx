@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Layers, ArrowLeft, AlertCircle } from 'lucide-react';
+import { ArrowLeft, AlertCircle } from 'lucide-react';
 import { RubricData } from '../types';
 import { getRubricByShareId } from '../services/firestoreService';
 
@@ -50,10 +50,8 @@ export function SharedRubricPage() {
       <div className="min-h-screen bg-slate-50 flex flex-col">
         <header className="bg-slate-900 sticky top-0 z-30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="bg-white/20 p-1.5 rounded-lg">
-                <Layers className="w-5 h-5 text-white" />
-              </div>
+            <Link to="/" className="flex items-center gap-2.5">
+              <img src="/logo.svg" alt="RubricArchitect" className="w-8 h-8 rounded-lg" />
               <h1 className="text-xl font-bold text-white">RubricArchitect</h1>
             </Link>
           </div>
@@ -85,10 +83,8 @@ export function SharedRubricPage() {
       {/* Header */}
       <header className="no-print bg-slate-900 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="bg-white/20 p-1.5 rounded-lg">
-              <Layers className="w-5 h-5 text-white" />
-            </div>
+          <Link to="/" className="flex items-center gap-2.5">
+            <img src="/logo.svg" alt="RubricArchitect" className="w-8 h-8 rounded-lg" />
             <h1 className="text-xl font-bold text-white">RubricArchitect</h1>
           </Link>
           <div className="text-slate-400 text-sm">

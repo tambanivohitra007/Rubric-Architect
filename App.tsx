@@ -50,7 +50,7 @@ const App: React.FC = () => {
               </Routes>
               <footer className="no-print border-t border-slate-200 bg-white mt-auto">
                 <div className="max-w-7xl mx-auto px-4 py-6 flex justify-center text-slate-400 text-sm">
-                  &copy; {new Date().getFullYear()} RubricArchitect. Powered by <a href='https://rindra.org'><strong>Rindra Razafinjatovo</strong></a> .
+                  &copy; {new Date().getFullYear()} RubricArchitect. Powered by <a href='https://rindra.org'> <strong>Rindra Razafinjatovo</strong></a> .
                 </div>
               </footer>
             </div>

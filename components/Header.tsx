@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Layers, Plus, Library, Menu, X } from 'lucide-react';
+import { Plus, Library, Menu, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { UserMenu } from './auth/UserMenu';
 
@@ -15,10 +15,8 @@ export function Header() {
     <header className="no-print bg-slate-900 sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="bg-teal-500 p-1.5 rounded-lg">
-              <Layers className="w-5 h-5 text-white" />
-            </div>
+          <Link to="/" className="flex items-center gap-2.5">
+            <img src="/logo.svg" alt="RubricArchitect" className="w-8 h-8 rounded-lg" />
             <h1 className="text-xl font-bold text-white">
               RubricArchitect
             </h1>
@@ -55,7 +53,7 @@ export function Header() {
         <div className="flex items-center gap-4">
           {!isAuthenticated && (
             <span className="text-sm text-slate-400 hidden sm:block">
-              University Assessment Builder
+              Asia-Pacific International University
             </span>
           )}
           {isAuthenticated && (
