@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /rubrics/{rubricId} {
+      // Read: owner OR public
+      allow read: if request.auth.uid == resource.data.userId
+                  || resource.data.isPublic == true;
+      // Create: authenticated, self as owner
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+      // Update: owner only, can't change userId
+      allow update: if request.auth.uid == resource.data.userId
+                    && request.resource.data.userId == resource.data.userId;
+      // Delete: owner only
+      allow delete: if request.auth.uid == resource.data.userId;
+    }
+  }
+}

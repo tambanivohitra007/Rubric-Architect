@@ -48,6 +48,27 @@ export interface RubricData {
   criteria: Criterion[];
   rows: RubricRow[];
   scale: string[]; // e.g., ["Needs Improvement", "Developing", "Proficient", "Advanced"]
+  // Firebase fields
+  id?: string; // Firestore document ID
+  userId?: string; // Owner's Firebase UID
+  createdAt?: Date; // Creation timestamp
+  updatedAt?: Date; // Last modified timestamp
+  isPublic?: boolean; // Sharing enabled
+  shareId?: string; // Unique share link ID
+}
+
+export interface AppUser {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+}
+
+export interface LibraryFilters {
+  searchQuery: string;
+  rubricType: RubricType | 'all';
+  sortBy: 'updatedAt' | 'createdAt' | 'topic';
+  sortOrder: 'asc' | 'desc';
 }
 
 export enum AppStep {

@@ -1,14 +1,55 @@
 import React, { useState } from 'react';
 import { RubricData } from '../types';
-import { Download, Printer, FileText, Check, ArrowLeft, Loader2, FileJson } from 'lucide-react';
+import { Download, Printer, FileText, Check, ArrowLeft, Loader2, FileJson, Save, Share2 } from 'lucide-react';
+import { useRubric } from '../hooks/useRubric';
+import { useAuth } from '../hooks/useAuth';
+import { ShareModal } from './shared/ShareModal';
 
 interface Props {
   data: RubricData;
+  updateData?: (data: Partial<RubricData>) => void;
   onBack: () => void;
+  onSaveSuccess?: (savedId: string) => void;
 }
 
-const Step4Review: React.FC<Props> = ({ data, onBack }) => {
+const Step4Review: React.FC<Props> = ({ data, updateData, onBack, onSaveSuccess }) => {
   const [isExporting, setIsExporting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [showShareModal, setShowShareModal] = useState(false);
+
+  const { saveRubric } = useRubric();
+  const { isAuthenticated } = useAuth();
+
+  const handleSave = async () => {
+    if (!isAuthenticated) {
+      setSaveMessage({ type: 'error', text: 'Please sign in to save rubrics' });
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveMessage(null);
+
+    try {
+      const savedId = await saveRubric(data);
+      if (savedId) {
+        setSaveMessage({ type: 'success', text: data.id ? 'Rubric updated!' : 'Rubric saved!' });
+        if (onSaveSuccess) {
+          onSaveSuccess(savedId);
+        }
+        if (updateData) {
+          updateData({ id: savedId });
+        }
+      } else {
+        setSaveMessage({ type: 'error', text: 'Failed to save rubric' });
+      }
+    } catch (error) {
+      setSaveMessage({ type: 'error', text: 'An error occurred while saving' });
+    } finally {
+      setIsSaving(false);
+      setTimeout(() => setSaveMessage(null), 3000);
+    }
+  };
 
   const handlePrint = () => {
     window.print();
@@ -34,7 +75,7 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
          "<head><meta charset='utf-8'><title>Rubric Export</title></head><body>";
     const footer = "</body></html>";
     const sourceHTML = header + element.innerHTML + footer;
-    
+
     const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
     const fileDownload = document.createElement("a");
     document.body.appendChild(fileDownload);
@@ -69,11 +110,17 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
     }
   };
 
+  const handleShareUpdate = (shareId: string | null, isPublic: boolean) => {
+    if (updateData) {
+      updateData({ shareId: shareId || undefined, isPublic });
+    }
+  };
+
   const isHolistic = data.rubricType === 'Holistic';
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-      
+
       <div className="no-print flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm gap-4">
         <button
           onClick={onBack}
@@ -82,8 +129,47 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
           <ArrowLeft className="w-4 h-4" />
           Back to Editing
         </button>
-        
-        <div className="flex flex-wrap gap-2 justify-end">
+
+        <div className="flex flex-wrap gap-2 justify-end items-center">
+          {saveMessage && (
+            <span className={`text-sm px-3 py-1 rounded-full ${
+              saveMessage.type === 'success'
+                ? 'bg-green-100 text-green-700'
+                : 'bg-red-100 text-red-700'
+            }`}>
+              {saveMessage.text}
+            </span>
+          )}
+
+          {isAuthenticated && (
+            <>
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="flex items-center gap-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-colors text-sm disabled:opacity-70"
+              >
+                {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                {isSaving ? 'Saving...' : (data.id ? 'Update' : 'Save')}
+              </button>
+
+              {data.id && (
+                <button
+                  onClick={() => setShowShareModal(true)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-colors text-sm ${
+                    data.isPublic
+                      ? 'bg-purple-600 text-white hover:bg-purple-700'
+                      : 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                  }`}
+                >
+                  <Share2 className="w-4 h-4" />
+                  {data.isPublic ? 'Shared' : 'Share'}
+                </button>
+              )}
+            </>
+          )}
+
+          <div className="h-6 w-px bg-slate-200 hidden sm:block" />
+
           <button
             onClick={handleJSONExport}
             className="flex items-center gap-2 px-3 py-2 text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 font-medium transition-colors text-sm"
@@ -92,7 +178,7 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
             <FileJson className="w-4 h-4" />
             JSON
           </button>
-          
+
           <button
             onClick={handleWordExport}
             className="flex items-center gap-2 px-3 py-2 text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 font-medium transition-colors text-sm"
@@ -131,7 +217,7 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
                {data.rubricType} Rubric
              </div>
           </div>
-          
+
           <div className="mt-6">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Learning Outcomes</h3>
             <ul className="space-y-1">
@@ -204,6 +290,16 @@ const Step4Review: React.FC<Props> = ({ data, onBack }) => {
             <p className="text-xs text-slate-400 italic">Created with RubricArchitect</p>
         </div>
       </div>
+
+      {showShareModal && data.id && (
+        <ShareModal
+          rubricId={data.id}
+          shareId={data.shareId}
+          isPublic={data.isPublic || false}
+          onClose={() => setShowShareModal(false)}
+          onUpdate={handleShareUpdate}
+        />
+      )}
     </div>
   );
 };
