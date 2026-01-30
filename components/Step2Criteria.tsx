@@ -24,7 +24,9 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
         data.courseName, 
         data.outcomes,
         data.contextMaterial,
-        data.attachedFile || null
+        data.attachedFile || null,
+        data.rubricType,
+        data.scale
       );
       updateData({ criteria: suggestions });
       setHasGenerated(true);
@@ -68,7 +70,7 @@ const Step2Criteria: React.FC<Props> = ({ data, updateData, onNext, onBack }) =>
           <div className="max-w-md">
             <h3 className="text-lg font-semibold text-slate-800">AI Assistance Ready</h3>
             <p className="text-slate-500 mt-1">
-              We will analyze your outcomes {data.attachedFile ? 'and uploaded materials' : ''} to suggest assessment criteria.
+              We will analyze your outcomes {data.attachedFile ? 'and uploaded materials' : ''} to suggest assessment criteria suited for a <strong>{data.rubricType}</strong> rubric.
             </p>
           </div>
           <button

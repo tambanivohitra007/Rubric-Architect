@@ -11,19 +11,33 @@ export const generateCriteriaSuggestions = async (
   courseName: string,
   outcomes: LearningOutcome[],
   contextMaterial: string,
-  attachedFile: AttachedFile | null
+  attachedFile: AttachedFile | null,
+  rubricType: RubricType,
+  scale: string[]
 ): Promise<Criterion[]> => {
   const outcomeText = outcomes.map(o => o.text).join("; ");
   
+  let styleGuide = "";
+  if (rubricType === 'Checklist') {
+      styleGuide = "Since this is a Checklist, phrase criteria as clear, binary requirements.";
+  } else if (rubricType === 'SinglePoint') {
+      styleGuide = "Since this is a Single-Point rubric, phrase criteria as the target standard to be met.";
+  } else if (rubricType === 'TaskSpecific') {
+      styleGuide = "Since this is a Task-Specific rubric, ensure criteria are concrete and directly related to the assignment details.";
+  }
+
   const promptText = `
     Context: Creating a university assessment rubric for course: "${courseName}".
     Assignment: "${topic}".
+    Rubric Type: ${rubricType}
+    Target Scoring Scale: ${scale.join(', ')}
     Learning Outcomes: ${outcomeText}
     
     Additional Context:
     ${contextMaterial}
 
     Task: Generate 5 distinct assessment criteria (dimensions) that align with these outcomes.
+    ${styleGuide}
     Even if the rubric type is holistic, please list the key dimensions that should be considered in the overall score.
   `;
 
