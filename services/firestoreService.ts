@@ -197,3 +197,16 @@ export async function duplicateRubric(rubricId: string, userId: string): Promise
   const docRef = await addDoc(collection(db, RUBRICS_COLLECTION), duplicateData);
   return docRef.id;
 }
+
+export async function deleteAllUserRubrics(userId: string): Promise<void> {
+  const rubrics = await getRubricsByUserId(userId);
+
+  const deletePromises = rubrics.map(rubric => {
+    if (rubric.id) {
+      return deleteRubric(rubric.id);
+    }
+    return Promise.resolve();
+  });
+
+  await Promise.all(deletePromises);
+}

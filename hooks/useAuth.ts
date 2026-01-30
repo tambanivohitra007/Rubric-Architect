@@ -5,9 +5,11 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   sendPasswordResetEmail,
+  deleteUser,
 } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 import { useAuthContext } from '../contexts/AuthContext';
+import { deleteAllUserRubrics } from '../services/firestoreService';
 
 export function useAuth() {
   const { user, loading } = useAuthContext();
@@ -60,6 +62,23 @@ export function useAuth() {
     }
   };
 
+  const deleteAccount = async () => {
+    if (!user) {
+      throw new Error('No user logged in');
+    }
+
+    try {
+      // Delete all user's rubrics first
+      await deleteAllUserRubrics(user.uid);
+
+      // Then delete the user account
+      await deleteUser(user);
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      throw error;
+    }
+  };
+
   return {
     user,
     loading,
@@ -68,6 +87,7 @@ export function useAuth() {
     signUpWithEmail,
     logout,
     resetPassword,
+    deleteAccount,
     isAuthenticated: !!user,
   };
 }
